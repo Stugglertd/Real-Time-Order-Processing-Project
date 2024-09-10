@@ -23,11 +23,6 @@ public class OrderController {
         return new ResponseEntity<>(savedOrder, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public String get(){
-        return "Get is working...";
-    }
-
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getOrderStatus(@PathVariable Long orderId){
         OrderResponse order = orderService.getOrderStatus(orderId);

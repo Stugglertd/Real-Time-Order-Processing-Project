@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService{
-    private static final String ORDER_TOPIC = "order";
+    private static final String ORDER_TOPIC = "order-topic";
     private final OrderRepository orderRepository;
     private final KafkaTemplate<String,Order> kafkaTemplate;
 
