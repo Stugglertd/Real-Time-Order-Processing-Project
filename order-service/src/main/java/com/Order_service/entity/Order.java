@@ -16,7 +16,7 @@ public class Order{
     private Long orderId;
     @NotNull(message = "Please Provide Customer Id")
     private Long CustomerId;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Product> products;
     @Embedded
     private Address address;
