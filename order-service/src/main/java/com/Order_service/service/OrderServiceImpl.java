@@ -1,10 +1,12 @@
 package com.Order_service.service;
 
+import com.Order_service.dto.InventoryUpdate;
 import com.Order_service.dto.OrderRequest;
 import com.Order_service.dto.OrderResponse;
 import com.Order_service.entity.Order;
 import com.Order_service.exception.ResourceNotFoundException;
 import jakarta.annotation.PostConstruct;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import com.Order_service.repo.OrderRepository;
@@ -22,12 +24,13 @@ public class OrderServiceImpl implements OrderService{
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setCustomerId(orderRequest.getCustomerId());
         order.setProducts(orderRequest.getProducts());
         order.setAddress(orderRequest.getAddress());
-        order.setStatus("pending");
+        order.setStatus("PENDING");
 
         Order savedOrder = orderRepository.save(order);
 
@@ -49,5 +52,16 @@ public class OrderServiceImpl implements OrderService{
             return response;
         }
         throw new ResourceNotFoundException("Order with id: " + orderId + " was not found..");
+    }
+
+    @Override
+    @KafkaListener(topics = "inventoryUpdate-topic",groupId = "order-group")
+    public void updateOrderBasedOnInventory(InventoryUpdate inventoryUpdate) {
+        Optional<Order> optionalOrder = orderRepository.findById(inventoryUpdate.getOrderId());
+        Order order = optionalOrder.get();
+        order.setStatus(inventoryUpdate.getStatus());
+
+        Order updatedOrder = orderRepository.save(order);
+        System.out.println("Updated Order: "+ updatedOrder);
     }
 }
