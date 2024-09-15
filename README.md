@@ -72,4 +72,5 @@ For Inventory Service
 
 
 Kafka Server Running On Port = localhost:9092
+
 Redis Server Running On Port = 6379
