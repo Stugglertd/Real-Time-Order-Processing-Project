@@ -69,3 +69,7 @@ For Inventory Service
 		"123",
 		"121"
 	]
+
+
+Kafka Server Running On Port = localhost:9092
+Redis Server Running On Port = 6379
