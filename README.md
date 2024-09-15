@@ -4,6 +4,8 @@ Developed and implemented a real-time order processing system that allows custom
 The Order Service handles customer orders and publishes them to Kafka topics for further processing. 
 The Inventory Service subscribes to the order topic to reserve inventory, while the Order Service listens to the inventory topic for updates on the success or failure of the reservation.
 
+Tech Stack Used : Java 8, Spring Boot, Kafka, Redis, Docker(for redis Server), MySQL, PostMan.
+
 Sample Api's
 
 For Order Service:
