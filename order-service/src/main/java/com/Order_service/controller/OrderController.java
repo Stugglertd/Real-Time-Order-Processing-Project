@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.Order_service.service.OrderService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -27,5 +29,11 @@ public class OrderController {
     public ResponseEntity<OrderResponse> getOrderStatus(@PathVariable Long orderId){
         OrderResponse order = orderService.getOrderStatus(orderId);
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> getDistinctCitites(){
+        final List<String> distinctCities = orderService.getDistinctCities();
+        return new ResponseEntity<>(distinctCities, HttpStatus.OK);
     }
 }
