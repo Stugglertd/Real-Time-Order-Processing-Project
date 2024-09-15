@@ -1,8 +1,9 @@
 # Real-Time-Order-Processing-Project readme
 
 Developed and implemented a real-time order processing system that allows customers to place orders, with asynchronous processing using Kafka as the messaging system.
-The Order Service handles customer orders and publishes them to Kafka topics for further processing. 
-The Inventory Service subscribes to the order topic to reserve inventory, while the Order Service listens to the inventory topic for updates on the success or failure of the reservation.
+-The Order Service handles customer orders and publishes them to Kafka topics for further processing. 
+-The Inventory Service subscribes to the order topic to reserve inventory, while the Order Service listens to the inventory topic for updates on the success or failure of the reservation.
+-Implemented Redis for time-based caching to enhance retrieval speed and improve application performance.
 
 Tech Stack Used : Java 8, Spring Boot, Kafka, Redis, Docker(for redis Server), MySQL, PostMan.
 
