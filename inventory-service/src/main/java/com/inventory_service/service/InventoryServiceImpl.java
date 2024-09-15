@@ -10,6 +10,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.kafka.core.KafkaTemplate;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Service
 public class InventoryServiceImpl implements InventoryService{
     public static final String INVENTORY_UPDATE_TOPIC = "inventoryUpdate-topic";
+    public static final String OUT_OF_STOCK_ITEM = "out_of_stock";
     private final InventoryRepo inventoryRepo;
     private final KafkaTemplate<String, InventoryUpdate> kafkaTemplate;
 
@@ -57,6 +59,24 @@ public class InventoryServiceImpl implements InventoryService{
             inventoryUpdate.setStatus("FAILED");
         }
         kafkaTemplate.send(INVENTORY_UPDATE_TOPIC,inventoryUpdate);
+    }
+
+    @Override
+    public List<String> getOutOfStockProducts() {
+        try(Jedis jedis = new Jedis("localhost", 6379)){
+            List<String> items = jedis.lrange(OUT_OF_STOCK_ITEM, 0, -1);
+            if(!items.isEmpty()){
+                return items;
+            }
+            else{
+                items = inventoryRepo.findOutOfStockProducts();
+                items.forEach(item -> {
+                    jedis.lpush(OUT_OF_STOCK_ITEM,item);
+                });
+                jedis.expire(OUT_OF_STOCK_ITEM,30);
+                return items;
+            }
+        }
     }
 
     @Transactional

@@ -4,6 +4,8 @@ import com.inventory_service.entity.Inventory;
 import com.inventory_service.service.InventoryService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {
@@ -23,5 +25,10 @@ public class InventoryController {
     public String addUpdateProduct(@RequestBody Inventory inventory){
         inventoryService.addProduct(inventory);
         return "Added/Updated product successfully...";
+    }
+
+    @GetMapping("/getOutOfStockProducts")
+    public List<String> getOutOfStockProducts(){
+        return inventoryService.getOutOfStockProducts();
     }
 }
